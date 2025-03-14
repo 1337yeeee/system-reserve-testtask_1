@@ -69,3 +69,23 @@ CREATE TABLE `hotel_agreements` (
  FOREIGN KEY (`company_id`) REFERENCES companies(`id`),
  FOREIGN KEY (`hotel_id`) REFERENCES hotels(`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COMMENT='Договоры между компанией и отелем';
+
+CREATE TABLE `agency_rules` (
+ `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+ `agency_id` int(10) unsigned NOT NULL COMMENT 'ID агентства',
+ `name` varchar(255) NOT NULL COMMENT 'Название правила',
+ `manager_message` varchar(255) NOT NULL COMMENT 'Сообщение для менеджера',
+ `is_active` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Активное правило',
+ PRIMARY KEY (`id`),
+ FOREIGN KEY (`agency_id`) REFERENCES agencies(`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COMMENT='Правила для агенств';
+
+CREATE TABLE `agency_rules_options` (
+ `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+ `rule_id` int(10) unsigned NOT NULL COMMENT 'ID правила',
+ `condition_type` int NOT NULL COMMENT 'Тип правила',
+ `comparison_operator` int NOT NULL COMMENT 'Оператор сравнения',
+ `value` varchar(255) NOT NULL COMMENT 'Значение для сравнения',
+ PRIMARY KEY (`id`),
+ FOREIGN KEY (`rule_id`) REFERENCES agency_rules(`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COMMENT='Условия правила для агенств';
