@@ -4,13 +4,13 @@ namespace Model;
 
 class AgencyRules extends BaseModel
 {
-    public const TABLE = 'agency_rules_options';
+    public const TABLE = 'agency_rules';
 
     public $id;
-    public $rule_id;
-    public $condition_type;
-    public $comparison_operator;
-    public $value;
+    public $agency_id;
+    public $name;
+    public $manager_message;
+    public $is_active;
 
     /**
      * @var AgencyRulesOptions[]
