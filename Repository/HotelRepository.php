@@ -2,6 +2,7 @@
 
 namespace Repository;
 
+use Model\Cities;
 use Model\Hotels;
 
 class HotelsRepository extends BaseRepository
@@ -33,6 +34,35 @@ class HotelsRepository extends BaseRepository
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
 
         return new $entityClass($result);
+    }
+
+    public function findWithCity(int $id): Hotels
+    {
+        $entityClass = $this->getEntityClass();
+        $table = $entityClass::TABLE;
+        $citiesTable = Cities::TABLE;
+
+        $statement = $this->conn->prepare(<<<SQL
+            select 
+                h.*, 
+                ci.country_id,
+                ci.name as city_name
+            from `{$table}` h
+            join `{$citiesTable}` ci on h.city_id = ci.id
+            where h.id = :hotel_id;
+        SQL);
+        $statement->bindParam('hotel_id', $id, \PDO::PARAM_INT);
+
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        $hotel = new $entityClass($result);
+        $city = new Cities([
+            'id' => 'city_id',
+            'name' => 'city_name',
+            'country_id' => 'country_id',
+        ]);
+        $hotel->setCity($city);
+
+        return $hotel;
     }
 
     /**

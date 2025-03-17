@@ -13,4 +13,5 @@ class AgencyHotelOptions extends BaseModel
     public $is_black;
     public $is_recomend;
     public $is_white;
+    public ?Agencies $agencies;
 }

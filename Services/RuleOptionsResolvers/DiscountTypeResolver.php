@@ -15,7 +15,7 @@ class DiscountTypeResolver extends BaseRuleOptionResolver
 
     public function resolve(): bool
     {
-        return $this->checkOperand();
-            // && $this->compare($this->option->comparison_operator, $this->hotel->discount);
+        return $this->checkOperand()
+            && $this->compareAny($this->option->comparison_operator, $this->hotel->getAgreements(), 'getDiscount');
     }
 }

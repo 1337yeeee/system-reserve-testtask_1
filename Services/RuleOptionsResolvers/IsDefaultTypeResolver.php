@@ -12,7 +12,7 @@ class IsDefaultTypeResolver extends BaseRuleOptionResolver
 
     public function resolve(): bool
     {
-        return $this->checkOperand();
-            // && $this->compare($this->option->comparison_operator, $this->hotel->is_default);
+        return $this->checkOperand()
+            && $this->compareAny($this->option->comparison_operator, $this->hotel->getAgreements(), 'getIsDefault');
     }
 }

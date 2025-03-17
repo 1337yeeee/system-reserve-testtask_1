@@ -10,4 +10,10 @@ class Hotels extends BaseModel
     public $name;
     public $stars;
     public $city_id;
+
+    public ?Cities $city = null;
+
+    public function setCity(Cities $city) {
+        $this->city = $city;
+    }
 }

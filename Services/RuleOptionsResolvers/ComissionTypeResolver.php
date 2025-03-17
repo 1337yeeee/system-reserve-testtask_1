@@ -15,7 +15,7 @@ class ComissionTypeResolver extends BaseRuleOptionResolver
 
     public function resolve(): bool
     {
-        return $this->checkOperand();
-            // && $this->compare($this->option->comparison_operator, $this->hotel->comission);
+        return $this->checkOperand()
+            && $this->compareAny($this->option->comparison_operator, $this->hotel->getAgreements(), 'getComissionPercent');
     }
 }

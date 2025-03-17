@@ -2,9 +2,11 @@
 
 namespace Services;
 
-use Model\AgencyRulesOptions;
+use Model\Agencies;
+use Model\FullHotel;
 use Model\AgencyRules;
-use Model\Hotels;
+use Model\AgencyRulesOptions;
+use Model\AgencyHotelOptions;
 use Services\RuleOptionsResolvers\CityTypeResolver;
 use Services\RuleOptionsResolvers\ComissionTypeResolver;
 use Services\RuleOptionsResolvers\CompanyTypeResolver;
@@ -21,35 +23,53 @@ class RuleCheckService
 {
 
     public function __construct(
-        private Hotels $hotel,
+        private FullHotel $hotel,
+        private Agencies $agency,
         private AgencyRules $rule
     ) {
         // pass
     }
 
-    public function applyRule(): bool
+    /**
+     * @return bool
+     */
+    public function applyRules(): bool
     {
-        foreach ($this->rule->getOptions() as $option) {
-            $res = $this->checkOption($option);
+        // TODO check hotel options, then check for every agency option
+        foreach ($this->agency->getOptions() as $hotelOption) {
+            $result = false;
+            foreach ($this->rule->getOptions() as $option) {
+                $result = $this->checkOption($hotelOption, $option);
+                if ($result === false) break;
+            }
+
+            if ($result === true) {
+                return $result;
+            }
         }
 
-        return true;
+        return false;
     }
 
-    private function checkOption(AgencyRulesOptions $option): bool
+    /**
+     * @param \Model\AgencyHotelOptions $hotelOption
+     * @param \Model\AgencyRulesOptions $option
+     * @return bool
+     */
+    private function checkOption(AgencyHotelOptions $hotelOption, AgencyRulesOptions $option): bool
     {
         $resolver = match ($option->condition_type) {
-            AgencyRulesOptions::COUNTRY_TYPE => new CountryTypeResolver($this->hotel, $option),
-            AgencyRulesOptions::CITY_TYPE => new CityTypeResolver($this->hotel, $option),
-            AgencyRulesOptions::STARS_TYPE => new StarsTypeResolver($this->hotel, $option),
-            AgencyRulesOptions::DISCOUNT_COMISSION_TYPE => new DiscountComissionTypeResolver($this->hotel, $option),
-            AgencyRulesOptions::DISCOUNT_TYPE => new DiscountTypeResolver($this->hotel, $option),
-            AgencyRulesOptions::COMISSION_TYPE => new ComissionTypeResolver($this->hotel, $option),
-            AgencyRulesOptions::IS_DEFAULT_TYPE => new IsDefaultTypeResolver($this->hotel, $option),
-            AgencyRulesOptions::COMPANY_TYPE => new CompanyTypeResolver($this->hotel, $option),
-            AgencyRulesOptions::IS_BLACK_TYPE => new IsBlackTypeResolver($this->hotel, $option),
-            AgencyRulesOptions::IS_RECOMENDED_TYPE => new IsRecomendedTypeResolver($this->hotel, $option),
-            AgencyRulesOptions::IS_WHITE_TYPE => new IsWhiteTypeResolver($this->hotel, $option),
+            AgencyRulesOptions::COUNTRY_TYPE => new CountryTypeResolver($this->hotel, $hotelOption, $option),
+            AgencyRulesOptions::CITY_TYPE => new CityTypeResolver($this->hotel, $hotelOption, $option),
+            AgencyRulesOptions::STARS_TYPE => new StarsTypeResolver($this->hotel, $hotelOption, $option),
+            AgencyRulesOptions::DISCOUNT_COMISSION_TYPE => new DiscountComissionTypeResolver($this->hotel, $hotelOption, $option),
+            AgencyRulesOptions::DISCOUNT_TYPE => new DiscountTypeResolver($this->hotel, $hotelOption, $option),
+            AgencyRulesOptions::COMISSION_TYPE => new ComissionTypeResolver($this->hotel, $hotelOption, $option),
+            AgencyRulesOptions::IS_DEFAULT_TYPE => new IsDefaultTypeResolver($this->hotel, $hotelOption, $option),
+            AgencyRulesOptions::COMPANY_TYPE => new CompanyTypeResolver($this->hotel, $hotelOption, $option),
+            AgencyRulesOptions::IS_BLACK_TYPE => new IsBlackTypeResolver($this->hotel, $hotelOption, $option),
+            AgencyRulesOptions::IS_RECOMENDED_TYPE => new IsRecomendedTypeResolver($this->hotel, $hotelOption, $option),
+            AgencyRulesOptions::IS_WHITE_TYPE => new IsWhiteTypeResolver($this->hotel, $hotelOption, $option),
         };
 
         return $resolver->resolve();

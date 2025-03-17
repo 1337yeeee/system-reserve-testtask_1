@@ -12,7 +12,7 @@ class IsWhiteTypeResolver extends BaseRuleOptionResolver
 
     public function resolve(): bool
     {
-        return $this->checkOperand();
-            // && $this->compare($this->option->comparison_operator, $this->hotel->is_white);
+        return $this->checkOperand()
+            && $this->compare($this->option->comparison_operator, $this->agencyOption->is_white);
     }
 }

@@ -6,16 +6,68 @@ class HotelAgreements extends BaseModel
 {
     public const TABLE = 'hotel_agreements';
 
-    public $id;
-    public $hotel_id;
-    public $discount_percent;
-    public $comission_percent;
-    public $is_default;
-    public $vat_percent;
-    public $vat1_percent;
-    public $vat1_value;
-    public $company_id;
-    public $date_from;
-    public $date_to;
-    public $is_cash_payment;
+    public int $id;
+    public int $hotel_id;
+    public int $discount_percent;
+    public int $comission_percent;
+    public bool $is_default;
+    public int $vat_percent;
+    public int $vat1_percent;
+    public int $vat1_value;
+    public int $company_id;
+    public string $date_from;
+    public string $date_to;
+    public bool $is_cash_payment;
+
+    public function getComissionPercent(): int
+    {
+        return $this->comission_percent;
+    }
+
+    public function getDiscountPercent(): int
+    {
+        return $this->discount_percent;
+    }
+
+    public function getCompanyId(): int
+    {
+        return $this->company_id;
+    }
+
+    public function getIsDefault(): bool
+    {
+        return $this->is_default;
+    }
+
+    public function getVatPercent(): int
+    {
+        return $this->vat_percent;
+    }
+
+    public function getVat1Percent(): int
+    {
+        return $this->vat1_percent;
+    }
+
+    public function getVat1Value(): int
+    {
+        return $this->vat1_value;
+    }
+
+    public function getDateFrom(): string
+    {
+        return $this->date_from;
+    }
+
+    public function getDateTo(): string
+    {
+        return $this->date_to;
+    }
+
+    public function getis_cash_payment(): int
+    {
+        return $this->is_cash_payment;
+    }
+
+
 }
