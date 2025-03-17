@@ -3,7 +3,7 @@
 namespace Services;
 
 use Model\Agencies;
-use Model\FullHotel;
+use Model\Hotels;
 use Model\AgencyRules;
 use Model\AgencyRulesOptions;
 use Model\AgencyHotelOptions;
@@ -23,7 +23,7 @@ class RuleCheckService
 {
 
     public function __construct(
-        private FullHotel $hotel,
+        private Hotels $hotel,
         private Agencies $agency,
         private AgencyRules $rule
     ) {

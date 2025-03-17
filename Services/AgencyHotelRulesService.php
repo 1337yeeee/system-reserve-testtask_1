@@ -2,13 +2,13 @@
 
 namespace Services;
 
-use Model\FullHotel;
+use Model\Hotels;
 use Repository\AgencyRulesRepository;
 
 class AgencyHotelRulesService
 {
     private array $rules;
-    private FullHotel $hotel;
+    private Hotels $hotel;
     private array $agencies;
 
     public function __construct(

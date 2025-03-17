@@ -3,7 +3,6 @@
 namespace Services;
 
 use Model\Hotels;
-use Model\FullHotel;
 use Repository\AgencyOptionsRepository;
 use Repository\AgencyRepository;
 use Repository\CityRepository;
@@ -12,7 +11,7 @@ use Repository\HotelsRepository;
 
 class HotelAssembler
 {
-    private FullHotel $hotel;
+    private Hotels $hotel;
 
     public function __construct(
         private HotelsRepository $hotelsRepository,
@@ -20,13 +19,13 @@ class HotelAssembler
         private HotelAgreementsRepository $hotelAgreementsRepository,
         Hotels $hotel
     ) {
-        $this->hotel = FullHotel::fromHotel($hotel);
+        // pass
     }
 
     /**
-     * @return FullHotel
+     * @return Hotels
      */
-    public function assemble(): FullHotel
+    public function assemble(): Hotels
     {
         $this->assembleCity();
         $this->assembleAgreements();

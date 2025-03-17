@@ -4,19 +4,19 @@ namespace Services\RuleOptionsResolvers;
 
 use InvalidArgumentException;
 use Model\AgencyHotelOptions;
-use Model\FullHotel;
+use Model\Hotels;
 use Model\AgencyRulesOptions;
 use Enums\ComparisonOperatorsEnum;
 
 abstract class BaseRuleOptionResolver implements RuleOptionResolver
 {
     public function __construct(
-        protected FullHotel $hotel,
+        protected Hotels $hotel,
         protected AgencyHotelOptions $agencyOption,
         protected AgencyRulesOptions $option
     ) {
         if ($this->hotel->id !== $this->agencyOption->hotel_id) {
-            throw new InvalidArgumentException('AgencyHotelOptions.hotel_id is not equal to FullHotel.id');
+            throw new InvalidArgumentException('AgencyHotelOptions.hotel_id is not equal to Hotels.id');
         }
     }
 
