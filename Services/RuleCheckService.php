@@ -35,10 +35,16 @@ class RuleCheckService
      */
     public function applyRules(): bool
     {
-        // TODO check hotel options, then check for every agency option
+        [$hotelRuleOptions, $agencyRuleOptions] = $this->separateHotelRules($this->rule->getOptions());
+
+        foreach ($hotelRuleOptions as $option) {
+            $result = $this->checkOption(new AgencyHotelOptions([]), $option);
+            if ($result === false) return false;
+        }
+
         foreach ($this->agency->getOptions() as $hotelOption) {
             $result = false;
-            foreach ($this->rule->getOptions() as $option) {
+            foreach ($agencyRuleOptions as $option) {
                 $result = $this->checkOption($hotelOption, $option);
                 if ($result === false) break;
             }
@@ -73,5 +79,36 @@ class RuleCheckService
         };
 
         return $resolver->resolve();
+    }
+
+    private function isOptionForHotel(AgencyRulesOptions $option)
+    {
+        return match($option->condition_type) {
+            AgencyRulesOptions::COUNTRY_TYPE => true,
+            AgencyRulesOptions::CITY_TYPE => true,
+            AgencyRulesOptions::STARS_TYPE => true,
+            AgencyRulesOptions::IS_DEFAULT_TYPE => true,
+            AgencyRulesOptions::COMPANY_TYPE => true,
+            default => false
+        };
+    }
+
+    /**
+     * @param AgencyRulesOptions[] $rules
+     * @return array<AgencyRulesOptions[]>
+     */
+    private function separateHotelRules(array $options): array {
+        $hotelOptions = [];
+        $otherOptions = [];
+
+        foreach ($options as $option) {
+            if ($this->isOptionForHotel($option)) {
+                $hotelOptions[] = $option;
+            } else {
+                $otherOptions[] = $option;
+            }
+        }
+
+        return [$hotelOptions, $otherOptions];
     }
 }

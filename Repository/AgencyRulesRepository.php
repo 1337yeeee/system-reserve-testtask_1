@@ -2,6 +2,8 @@
 
 namespace Repository;
 
+use Model\Agencies;
+use Model\AgencyHotelOptions;
 use Model\AgencyRules;
 use Model\AgencyRulesOptions;
 
@@ -55,11 +57,13 @@ class AgencyRulesRepository extends BaseRepository
      * Selects records of agency rules with their options
      * @return AgencyRules[]
      */
-    public function findAllWithOptions(): array
+    public function findAllByHotelIdWithOptions(int $hotelId): array
     {
         $entities = [];
         $ruleTable = AgencyRules::TABLE;
         $optionTable = AgencyRulesOptions::TABLE;
+        $agencyTable = Agencies::TABLE;
+        $angencyOptionTable = AgencyHotelOptions::TABLE;
 
         $query = <<<SQL
             select 
@@ -74,9 +78,13 @@ class AgencyRulesRepository extends BaseRepository
                 aro.value
             from {$ruleTable} ar
             left join {$optionTable} aro on ar.id = aro.rule_id
+            left join {$agencyTable} a on a.id = ar.agency_id
+            left join {$angencyOptionTable} ao on ao.agency_id = a.id
+            where ao.hotel_id = :hotelId
             order by ar.id, aro.id;
         SQL;
         $statement = $this->conn->prepare($query);
+        $statement->bindParam('hotelId', $hotelId, \PDO::PARAM_INT);
         $statement->execute();
 
         $rules = [];
