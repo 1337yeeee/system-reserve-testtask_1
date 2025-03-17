@@ -3,21 +3,16 @@
 namespace Services;
 
 use Model\Hotels;
-use Repository\AgencyOptionsRepository;
-use Repository\AgencyRepository;
 use Repository\CityRepository;
 use Repository\HotelAgreementsRepository;
-use Repository\HotelsRepository;
 
 class HotelAssembler
 {
-    private Hotels $hotel;
 
     public function __construct(
-        private HotelsRepository $hotelsRepository,
         private CityRepository $cityRepository,
         private HotelAgreementsRepository $hotelAgreementsRepository,
-        Hotels $hotel
+        private Hotels $hotel
     ) {
         // pass
     }
