@@ -51,7 +51,7 @@ class HotelAgreementsRepository extends BaseRepository
     /**
      * @return HotelAgreements[]
      */
-    public function findByHotelId(int $hotelId): array
+    public function findAllByHotelId(int $hotelId): array
     {
         $entities = [];
         $table = HotelAgreements::TABLE;
