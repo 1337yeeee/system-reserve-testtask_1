@@ -32,7 +32,11 @@ class AgencyAssembler
         $options = [];
 
         foreach ($this->options as $option) {
-            $options[$option->agency_id] = $option;
+            if (empty($options[$option->agency_id])) {
+                $options[$option->agency_id] = [$option];
+            } else {
+                $options[$option->agency_id][] = $option;
+            }
         }
 
         foreach ($this->agencies as $agency) {
@@ -55,7 +59,7 @@ class AgencyAssembler
         if (empty($agencies)) {
             $this->agencies = $this->agencyRepository->findAllByHotelId($this->hotel->id);
         }
-        return $$this->agencies;
+        return $this->agencies;
     }
 
     private function getAgencyOptions(): array

@@ -22,6 +22,7 @@ class AgencyOptionsRepository extends BaseRepository
             limit 1;
         SQL);
         $statement->bindParam('id', $id, \PDO::PARAM_INT);
+        $statement->execute();
 
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
 
@@ -40,6 +41,7 @@ class AgencyOptionsRepository extends BaseRepository
             select *
             from {$table};
         SQL);
+        $statement->execute();
 
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $entities[] = new AgencyHotelOptions($row);
@@ -60,6 +62,7 @@ class AgencyOptionsRepository extends BaseRepository
             where hotel_id = :hotel_id;
         SQL);
         $statement->bindParam('hotel_id', $hotelId, \PDO::PARAM_INT);
+        $statement->execute();
 
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $entities[] = new AgencyHotelOptions($row);

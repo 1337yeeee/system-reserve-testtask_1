@@ -21,13 +21,14 @@ use Services\RuleOptionsResolvers\StarsTypeResolver;
 
 class RuleCheckService
 {
+    private $dummyAgencyHotelOption;
 
     public function __construct(
         private Hotels $hotel,
         private Agencies $agency,
         private AgencyRules $rule
     ) {
-        // pass
+        $this->dummyAgencyHotelOption = new AgencyHotelOptions(['hotel_id'=>$this->hotel->id]);
     }
 
     /**
@@ -35,15 +36,15 @@ class RuleCheckService
      */
     public function applyRules(): bool
     {
+        $result = false;
         [$hotelRuleOptions, $agencyRuleOptions] = $this->separateHotelRules($this->rule->getOptions());
 
         foreach ($hotelRuleOptions as $option) {
-            $result = $this->checkOption(new AgencyHotelOptions([]), $option);
+            $result = $this->checkOption($this->dummyAgencyHotelOption, $option);
             if ($result === false) return false;
         }
 
         foreach ($this->agency->getOptions() as $hotelOption) {
-            $result = false;
             foreach ($agencyRuleOptions as $option) {
                 $result = $this->checkOption($hotelOption, $option);
                 if ($result === false) break;
@@ -54,7 +55,7 @@ class RuleCheckService
             }
         }
 
-        return false;
+        return $result;
     }
 
     /**

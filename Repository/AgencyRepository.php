@@ -23,6 +23,7 @@ class AgencyRepository extends BaseRepository
             limit 1;
         SQL);
         $statement->bindParam('id', $id, \PDO::PARAM_INT);
+        $statement->execute();
 
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
 
@@ -41,6 +42,7 @@ class AgencyRepository extends BaseRepository
             select *
             from {$table};
         SQL);
+        $statement->execute();
 
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $entities[] = new Agencies($row);
@@ -57,12 +59,13 @@ class AgencyRepository extends BaseRepository
         $agencyOptionsTable = AgencyHotelOptions::TABLE;
 
         $statement = $this->conn->prepare(<<<SQL
-            select a.*
+            select distinct a.*
             from `{$table}` a
             left join `{$agencyOptionsTable}` ao on ao.agency_id = a.id
             where ao.hotel_id = :hotel_id;
         SQL);
         $statement->bindParam('hotel_id', $hotelId, \PDO::PARAM_INT);
+        $statement->execute();
 
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $entities[] = new Agencies($row);

@@ -27,12 +27,12 @@ abstract class BaseRuleOptionResolver implements RuleOptionResolver
      */
     public function compare(ComparisonOperatorsEnum $comparisonOperator, $valueTocompare) {
         return match ($comparisonOperator) {
-            ComparisonOperatorsEnum::Equal => $valueTocompare === $this->option->value,
+            ComparisonOperatorsEnum::Equal => (string) $valueTocompare === (string) $this->option->value,
             ComparisonOperatorsEnum::Grater => $valueTocompare > $this->option->value,
             ComparisonOperatorsEnum::GraterOrEqual => $valueTocompare >= $this->option->value,
             ComparisonOperatorsEnum::Less => $valueTocompare < $this->option->value,
             ComparisonOperatorsEnum::LessOrEqual => $valueTocompare <= $this->option->value,
-            ComparisonOperatorsEnum::NotEqual => $valueTocompare !== $this->option->value,
+            ComparisonOperatorsEnum::NotEqual => (string) $valueTocompare !== (string) $this->option->value,
         };
     }
 

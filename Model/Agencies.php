@@ -10,7 +10,7 @@ class Agencies extends BaseModel
     public $name;
     
     /** @var AgencyHotelOptions[] */
-    private array $options;
+    private array $options = [];
 
     /**
      * @param AgencyHotelOptions[] $options

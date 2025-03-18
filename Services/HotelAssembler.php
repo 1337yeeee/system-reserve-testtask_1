@@ -32,14 +32,14 @@ class HotelAssembler
      */
     private function assembleCity(): void
     {
-        if (isset($this->hotel->city)) return;
+        if (!empty($this->hotel->city)) return;
         $city = $this->cityRepository->find($this->hotel->city_id);
         $this->hotel->city = $city;
     }
 
     private function assembleAgreements(): void
     {
-        if (isset($this->hotel->agreements)) return;
+        if (!empty($this->hotel->agreements)) return;
         $agreements = $this->hotelAgreementsRepository->findAllByHotelId($this->hotel->id);
         $this->hotel->setAgreements($agreements);
     }

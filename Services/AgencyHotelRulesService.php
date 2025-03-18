@@ -19,7 +19,16 @@ class AgencyHotelRulesService
     {
         $this->hotel = $hotelAssembler->assemble();
         $this->agencies = $agencyAssembler->asseble();
-        $this->rules = $rulesRepository->findAllByHotelIdWithOptions($this->hotel->id);
+        $rules = $rulesRepository->findAllByHotelIdWithOptions($this->hotel->id);
+
+        $this->rules = [];
+        foreach ($rules as $rule) {
+            if (isset($this->rules[$rule->agency_id])) {
+                $this->rules[$rule->agency_id][] = $rule;
+            } else {
+                $this->rules[$rule->agency_id] = [$rule];
+            }
+        }
     }
 
     public function getPassedAgncies(): array
@@ -28,7 +37,6 @@ class AgencyHotelRulesService
 
         foreach ($this->agencies as $agency) {
             $rules = $this->rules[$agency->id];
-            if (empty($rules)) continue;
 
             foreach ($rules as $rule) {
                 $ruleCheckService = new RuleCheckService($this->hotel, $agency, $rule);

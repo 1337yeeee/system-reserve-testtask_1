@@ -3,9 +3,10 @@
 namespace Repository;
 
 use Model\Agencies;
-use Model\AgencyHotelOptions;
 use Model\AgencyRules;
+use Model\AgencyHotelOptions;
 use Model\AgencyRulesOptions;
+use Enums\ComparisonOperatorsEnum;
 
 class AgencyRulesRepository extends BaseRepository
 {
@@ -91,11 +92,11 @@ class AgencyRulesRepository extends BaseRepository
         $currentRuleId = null;
 
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            if ($row['role_id'] !== $currentRuleId) {
-                $currentRuleId = $row['role_id'];
+            if ($row['rule_id'] !== $currentRuleId) {
+                $currentRuleId = $row['rule_id'];
                 $rule = new AgencyRules(
                     [
-                        'id' => $row['role_id'],
+                        'id' => $row['rule_id'],
                         'agency_id' => $row['agency_id'],
                         'name' => $row['name'],
                         'manager_message' => $row['manager_message'],
@@ -108,8 +109,9 @@ class AgencyRulesRepository extends BaseRepository
             if ($row['option_id'] !== null) {
                 $optionData = [
                     'id' => $row['option_id'],
+                    'rule_id' => $row['rule_id'],
                     'condition_type' => $row['condition_type'],
-                    'comparison_operator' => $row['comparison_operator'],
+                    'comparison_operator' => ComparisonOperatorsEnum::tryFrom($row['comparison_operator']),
                     'value' => $row['value'],
                 ];
                 $option = new AgencyRulesOptions($optionData);

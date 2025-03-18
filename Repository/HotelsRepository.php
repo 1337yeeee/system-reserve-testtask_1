@@ -30,6 +30,7 @@ class HotelsRepository extends BaseRepository
             limit 1;
         SQL);
         $statement->bindParam('id', $id, \PDO::PARAM_INT);
+        $statement->execute();
 
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
 
@@ -52,6 +53,7 @@ class HotelsRepository extends BaseRepository
             where h.id = :hotel_id;
         SQL);
         $statement->bindParam('hotel_id', $id, \PDO::PARAM_INT);
+        $statement->execute();
 
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
         $hotel = new $entityClass($result);
@@ -78,6 +80,7 @@ class HotelsRepository extends BaseRepository
             select *
             from {$table};
         SQL);
+        $statement->execute();
 
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $entities[] = new $entityClass($row);

@@ -1,0 +1,10 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Enums\\": "Enums/",
+            "Model\\": "Model/",
+            "Services\\": "Services/",
+            "Repository\\": "Repository/"
+        }
+    }
+}

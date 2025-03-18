@@ -22,6 +22,7 @@ class CityRepository extends BaseRepository
             limit 1;
         SQL);
         $statement->bindParam('id', $id, \PDO::PARAM_INT);
+        $statement->execute();
 
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
 
@@ -40,6 +41,7 @@ class CityRepository extends BaseRepository
             select *
             from {$table};
         SQL);
+        $statement->execute();
 
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $entities[] = new Cities($row);
