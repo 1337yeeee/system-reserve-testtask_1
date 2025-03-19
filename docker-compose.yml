@@ -12,7 +12,9 @@ services:
       - ./docker/db/dump:/docker-entrypoint-initdb.d
 
   php:
-    build: './docker/php'
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
     env_file:
       - .env
     volumes:
