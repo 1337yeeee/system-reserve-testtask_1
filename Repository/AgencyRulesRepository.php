@@ -60,7 +60,6 @@ class AgencyRulesRepository extends BaseRepository
      */
     public function findAllByHotelIdWithOptions(int $hotelId): array
     {
-        $entities = [];
         $ruleTable = AgencyRules::TABLE;
         $optionTable = AgencyRulesOptions::TABLE;
         $agencyTable = Agencies::TABLE;
@@ -82,6 +81,7 @@ class AgencyRulesRepository extends BaseRepository
             left join {$agencyTable} a on a.id = ar.agency_id
             left join {$angencyOptionTable} ao on ao.agency_id = a.id
             where ao.hotel_id = :hotelId
+            and ar.is_active = 1
             order by ar.id, aro.id;
         SQL;
         $statement = $this->conn->prepare($query);
@@ -115,7 +115,7 @@ class AgencyRulesRepository extends BaseRepository
                     'value' => $row['value'],
                 ];
                 $option = new AgencyRulesOptions($optionData);
-                $rules[$currentRuleId]->addOption($option); // Предполагается метод addOption()
+                $rules[$currentRuleId]->addOption($option);
             }
         }
 
